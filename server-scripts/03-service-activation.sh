@@ -57,24 +57,21 @@ fi
 
 # 2. 의존성 설치
 log "2. NPM 의존성 설치..."
+
+# 빌드에 필요한 핵심 패키지들을 먼저 설치
+log "빌드 필수 패키지 설치..."
+REQUIRED_PACKAGES="@tailwindcss/postcss tailwindcss postcss autoprefixer class-variance-authority clsx"
+npm install $REQUIRED_PACKAGES --save
+success "빌드 필수 패키지 설치 완료"
+
 # 프로덕션과 개발 의존성을 모두 설치 (빌드에 필요한 패키지 포함)
+log "전체 의존성 설치..."
 if npm install; then
     success "의존성 설치 완료"
 else
     error "의존성 설치 실패"
     exit 1
 fi
-
-# 빌드에 필요한 핵심 패키지들이 있는지 확인하고 없으면 설치
-log "빌드 필수 패키지 확인 및 설치..."
-REQUIRED_PACKAGES="@tailwindcss/postcss tailwindcss postcss autoprefixer class-variance-authority clsx"
-for package in $REQUIRED_PACKAGES; do
-    if ! npm list "$package" > /dev/null 2>&1; then
-        log "$package 패키지 설치 중..."
-        npm install "$package"
-    fi
-done
-success "빌드 필수 패키지 확인 완료"
 
 # 3. 보안 취약점 검사 및 수정
 log "3. 보안 취약점 검사..."
@@ -89,15 +86,20 @@ warning "xlsx 패키지는 알려진 취약점이 있지만 기능에 영향 없
 log "보안 검사 완료 (설치 계속 진행)"
 
 # 4. Next.js 빌드
-log "4. Next.js 애플리케이션 빌드..."
-# 기존 빌드 제거
-rm -rf .next
+log "4. Next.js 애플리케이션 빌드 확인..."
 
-if npm run build; then
-    success "Next.js 빌드 완료"
+# 빌드가 이미 존재하는지 확인
+if [ -d ".next" ]; then
+    log "기존 빌드가 존재합니다. 빌드를 건너뜁니다."
+    success "Next.js 빌드 확인 완료"
 else
-    error "Next.js 빌드 실패"
-    exit 1
+    log "빌드가 없습니다. 새로 빌드합니다..."
+    if npm run build; then
+        success "Next.js 빌드 완료"
+    else
+        error "Next.js 빌드 실패"
+        exit 1
+    fi
 fi
 
 # 5. PM2 생태계 파일 생성
