@@ -49,9 +49,9 @@ export const ApplicationSubmitSchema = z.object({
   
   budgetRange: z.enum([
     "under_10m",
-    "10m_50m",
-    "50m_100m",
-    "100m_500m", 
+    "range_10m_50m",
+    "range_50m_100m",
+    "range_100m_500m", 
     "over_500m"
   ]).refine((val) => val !== undefined, {
     message: "예산 범위를 선택해주세요"

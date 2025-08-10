@@ -320,7 +320,7 @@ export function ApplicationForm({ onSubmit, isLoading = false }: ApplicationForm
                 </Label>
                 <Select
                   value={budgetRange}
-                  onValueChange={(value) => setValue("budgetRange", value as "under_10m" | "10m_50m" | "50m_100m" | "100m_500m" | "over_500m")}
+                  onValueChange={(value) => setValue("budgetRange", value as "under_10m" | "range_10m_50m" | "range_50m_100m" | "range_100m_500m" | "over_500m")}
                 >
                   <SelectTrigger className={errors.budgetRange ? "border-red-500" : ""}>
                     <SelectValue placeholder="예산 범위를 선택하세요" />

@@ -16,9 +16,9 @@ export const PROJECT_TYPES = {
 
 export const BUDGET_RANGES = {
   under_10m: "월 50만원 미만",
-  "10m_50m": "월 50만원 ~ 100만원",
-  "50m_100m": "월 100만원 ~ 200만원",
-  "100m_500m": "월 200만원 ~ 500만원",
+  "range_10m_50m": "월 50만원 ~ 100만원",
+  "range_50m_100m": "월 100만원 ~ 200만원",
+  "range_100m_500m": "월 200만원 ~ 500만원",
   over_500m: "월 500만원 이상"
 } as const;
 

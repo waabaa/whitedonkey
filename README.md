@@ -123,7 +123,7 @@ npm run dev
 ### 주요 Enum
 - **ApplicationStatus**: PENDING, REVIEWING, APPROVED, REJECTED, ON_HOLD
 - **ProjectType**: youtube, seo, sns, local, payment, consulting
-- **BudgetRange**: under_10m, 10m_50m, 50m_100m, 100m_500m, over_500m (월 요금제 기준)
+- **BudgetRange**: under_10m, range_10m_50m, range_50m_100m, range_100m_500m, over_500m (월 요금제 기준)
 
 ## 🔒 보안 기능
 
