@@ -4,7 +4,18 @@
 
 ## 🚀 빠른 시작
 
-### 전체 자동 설치 (권장)
+### 🔧 Node.js 충돌 문제가 있는 경우 (권장)
+```bash
+# 저장소 업데이트 후 서버에서 실행
+cd /var/www/whitedonkey
+git pull origin main
+
+# 문제 해결 및 자동 설치 (한 번에 모든 문제 해결)
+chmod +x server-scripts/quick-fix.sh
+sudo ./server-scripts/quick-fix.sh
+```
+
+### 전체 자동 설치 (Node.js 문제 없는 경우)
 ```bash
 # 저장소 클론 후 서버에서 실행
 git clone https://github.com/waabaa/whitedonkey.git /var/www/whitedonkey
@@ -12,7 +23,14 @@ cd /var/www/whitedonkey
 
 # 모든 설정을 한 번에 실행
 chmod +x server-scripts/00-complete-setup.sh
-./server-scripts/00-complete-setup.sh
+sudo ./server-scripts/00-complete-setup.sh
+```
+
+### Node.js 문제만 해결하는 경우
+```bash
+# Node.js/npm 충돌 문제만 해결
+chmod +x server-scripts/fix-nodejs-npm.sh
+sudo ./server-scripts/fix-nodejs-npm.sh
 ```
 
 ### 단계별 설치
@@ -31,6 +49,8 @@ chmod +x server-scripts/00-complete-setup.sh
 
 | 파일명 | 설명 | 실행시간 |
 |--------|------|----------|
+| `quick-fix.sh` | 🔧 **Node.js 충돌 해결 + 전체 설치** | ~20-25분 |
+| `fix-nodejs-npm.sh` | 🔧 Node.js/npm 충돌 문제만 해결 | ~3-5분 |
 | `00-complete-setup.sh` | 🎯 전체 자동화 스크립트 | ~15-20분 |
 | `01-server-setup.sh` | 🔧 시스템 패키지 및 서비스 설치 | ~5-8분 |
 | `02-database-setup.sh` | 🗄️ PostgreSQL 설정 및 Prisma 마이그레이션 | ~3-5분 |

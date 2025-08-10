@@ -38,7 +38,7 @@ log "🚀 흰당나귀 서버 환경 설정 시작..."
 log "1. 시스템 패키지 업데이트..."
 sudo apt update && sudo apt upgrade -y
 
-# 2. 필수 패키지 설치
+# 2. 필수 패키지 설치 (Node.js와 npm 제외)
 log "2. 필수 패키지 설치..."
 sudo apt install -y \
     curl \
@@ -47,23 +47,29 @@ sudo apt install -y \
     nginx \
     postgresql \
     postgresql-contrib \
-    nodejs \
-    npm \
     certbot \
     python3-certbot-nginx \
     htop \
     ufw \
     fail2ban
 
-# 3. Node.js 버전 확인 및 업데이트 (필요시)
-log "3. Node.js 버전 확인..."
-NODE_VERSION=$(node --version | cut -d'v' -f2 | cut -d'.' -f1)
-if [ "$NODE_VERSION" -lt 18 ]; then
-    warning "Node.js 버전이 낮습니다. 업데이트합니다..."
-    curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-    sudo apt install -y nodejs
+# Node.js/npm 충돌 체크
+log "Node.js/npm 상태 확인..."
+if ! command -v node &> /dev/null || ! command -v npm &> /dev/null; then
+    warning "Node.js 또는 npm이 설치되지 않았습니다."
+    warning "먼저 ./server-scripts/fix-nodejs-npm.sh를 실행하세요."
+    exit 1
 fi
 
+NODE_VERSION=$(node --version | cut -d'v' -f2 | cut -d'.' -f1)
+if [ "$NODE_VERSION" -lt 18 ]; then
+    warning "Node.js 버전이 너무 낮습니다 (현재: v$NODE_VERSION, 필요: v18+)"
+    warning "먼저 ./server-scripts/fix-nodejs-npm.sh를 실행하세요."
+    exit 1
+fi
+
+# 3. Node.js 정보 출력
+log "3. Node.js 환경 확인 완료..."
 success "Node.js 버전: $(node --version)"
 success "NPM 버전: $(npm --version)"
 
