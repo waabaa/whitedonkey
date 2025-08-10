@@ -57,12 +57,24 @@ fi
 
 # 2. 의존성 설치
 log "2. NPM 의존성 설치..."
-if npm ci --production; then
+# 프로덕션과 개발 의존성을 모두 설치 (빌드에 필요한 패키지 포함)
+if npm install; then
     success "의존성 설치 완료"
 else
     error "의존성 설치 실패"
     exit 1
 fi
+
+# 빌드에 필요한 핵심 패키지들이 있는지 확인하고 없으면 설치
+log "빌드 필수 패키지 확인 및 설치..."
+REQUIRED_PACKAGES="@tailwindcss/postcss tailwindcss postcss autoprefixer class-variance-authority clsx"
+for package in $REQUIRED_PACKAGES; do
+    if ! npm list "$package" > /dev/null 2>&1; then
+        log "$package 패키지 설치 중..."
+        npm install "$package"
+    fi
+done
+success "빌드 필수 패키지 확인 완료"
 
 # 3. 보안 취약점 검사 및 수정
 log "3. 보안 취약점 검사..."
