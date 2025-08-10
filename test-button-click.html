@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button Click Test</title>
+    <style>
+        .test-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 20px;
+            background: #00ff00;
+            color: #000;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+            pointer-events: auto;
+        }
+        .test-button:hover {
+            background: #00dd00;
+        }
+    </style>
+</head>
+<body>
+    <h1>Button Click Test</h1>
+    
+    <p>Testing basic anchor tag click:</p>
+    <a href="/apply?service=ai-consulting" class="test-button">서비스 문의하기 - Basic</a>
+    
+    <p>Testing with inline onclick:</p>
+    <a href="/apply?service=ai-consulting" class="test-button" onclick="console.log('Clicked!'); return true;">서비스 문의하기 - With Click</a>
+    
+    <p>Testing with JavaScript navigation:</p>
+    <button class="test-button" onclick="window.location.href='/apply?service=ai-consulting'">서비스 문의하기 - JS</button>
+    
+    <script>
+        console.log('Test page loaded');
+        
+        // Add click listener to all test buttons
+        document.addEventListener('DOMContentLoaded', function() {
+            const buttons = document.querySelectorAll('.test-button');
+            buttons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    console.log('Button clicked:', this.href || this.onclick);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

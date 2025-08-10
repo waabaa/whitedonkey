@@ -1,0 +1,376 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
+@import "tailwindcss";
+
+:root {
+  --background: #0a0a0a;
+  --foreground: #ffffff;
+  --primary: #00ff00;
+  --primary-foreground: #0a0a0a;
+  --secondary: #1a1a1a;
+  --secondary-foreground: #ffffff;
+  --muted: #1a1a1a;
+  --muted-foreground: #888888;
+  --accent: #00ff00;
+  --accent-foreground: #0a0a0a;
+  --border: #2a2a2a;
+  --input: #1a1a1a;
+  --card: #141414;
+  --card-foreground: #ffffff;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --font-sans: 'Noto Sans KR', var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: 'Noto Sans KR', Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+  font-weight: 300;
+}
+
+/* Grid Background Pattern */
+.grid-bg {
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none; /* Allow clicks to pass through */
+}
+
+/* Geometric Patterns */
+.geometric-pattern {
+  background: radial-gradient(circle at 20% 80%, rgba(0, 255, 0, 0.05) 0%, transparent 50%),
+              radial-gradient(circle at 80% 20%, rgba(0, 255, 0, 0.03) 0%, transparent 50%);
+}
+
+/* Neon Green Glow */
+.neon-glow {
+  box-shadow: 0 0 20px rgba(0, 255, 0, 0.2), 0 0 40px rgba(0, 255, 0, 0.1);
+}
+
+/* Text Gradient */
+.text-gradient {
+  background: linear-gradient(135deg, #00ff00, #ffffff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Smooth Transitions */
+.smooth-transition {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Side Navigation Dots */
+.nav-dots {
+  position: fixed;
+  right: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 50;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 255, 0, 0.8);
+}
+
+/* Custom Animations */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes bounce-slow {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(180deg);
+  }
+}
+
+@keyframes orbit {
+  from {
+    transform: rotate(0deg) translateX(60px) rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg) translateX(60px) rotate(-360deg);
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.8);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+@keyframes morph {
+  0%, 100% {
+    border-radius: 50%;
+    transform: scale(1);
+  }
+  25% {
+    border-radius: 30%;
+    transform: scale(1.1);
+  }
+  50% {
+    border-radius: 20%;
+    transform: scale(0.9);
+  }
+  75% {
+    border-radius: 40%;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes particle-drift {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(20px, -30px) rotate(180deg);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translate(-10px, 40px) rotate(360deg);
+    opacity: 0.3;
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 8s linear infinite;
+}
+
+.animate-bounce-slow {
+  animation: bounce-slow 3s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-orbit {
+  animation: orbit 20s linear infinite;
+}
+
+.animate-pulse-ring {
+  animation: pulse-ring 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
+}
+
+.animate-morph {
+  animation: morph 8s ease-in-out infinite;
+}
+
+.animate-particle-drift {
+  animation: particle-drift 15s ease-in-out infinite;
+}
+
+.delay-150 {
+  animation-delay: 150ms;
+}
+
+.delay-300 {
+  animation-delay: 300ms;
+}
+
+.delay-450 {
+  animation-delay: 450ms;
+}
+
+.delay-600 {
+  animation-delay: 600ms;
+}
+
+.delay-1000 {
+  animation-delay: 1000ms;
+}
+
+/* AI Partners Auto-scroll Animation */
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll-left {
+  animation: scroll-left 60s linear infinite;
+}
+
+.animate-scroll-left:hover {
+  animation-play-state: paused;
+}
+
+/* FOLLOW ME Vertical Text - Responsive Layout */
+@media screen and (max-width: 1280px) {
+  .follow-me-container {
+    left: 0.5rem !important;
+  }
+}
+
+@media screen and (max-height: 600px) {
+  .follow-me-container {
+    display: none !important;
+  }
+}
+
+/* Hide Next.js Development Indicators */
+div[data-nextjs-toast-wrapper] {
+  display: none !important;
+}
+
+button[data-nextjs-toast] {
+  display: none !important;
+}
+
+div[id^="__next-dev-"] {
+  display: none !important;
+}
+
+/* Hide any dev overlays */
+div[data-nextjs-overlay] {
+  display: none !important;
+}
+
+/* Hide build indicator */
+div[data-nextjs-build-indicator] {
+  display: none !important;
+}
+
+/* Donkey Animation Keyframes */
+@keyframes donkey-jump {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  20% {
+    transform: translateY(-15px) scale(1.05);
+  }
+  40% {
+    transform: translateY(-10px) scale(1.1);
+  }
+  60% {
+    transform: translateY(-20px) scale(1.05);
+  }
+  80% {
+    transform: translateY(-5px) scale(1.02);
+  }
+}
+
+@keyframes leg-kick {
+  0%, 100% {
+    transform: rotate(0deg) scaleY(1);
+  }
+  25% {
+    transform: rotate(-15deg) scaleY(1.2);
+  }
+  50% {
+    transform: rotate(10deg) scaleY(0.8);
+  }
+  75% {
+    transform: rotate(-5deg) scaleY(1.1);
+  }
+}
+
+@keyframes ear-wiggle {
+  0%, 100% {
+    transform: rotate(12deg);
+  }
+  50% {
+    transform: rotate(25deg);
+  }
+}
+
+@keyframes tail-wag {
+  0%, 100% {
+    transform: rotate(-20deg);
+  }
+  50% {
+    transform: rotate(20deg);
+  }
+}
+
+@keyframes sparkle {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.3);
+  }
+}
+
+.animate-donkey-jump {
+  animation: donkey-jump 1.5s ease-in-out infinite;
+}
+
+.animate-leg-kick {
+  animation: leg-kick 0.8s ease-in-out infinite;
+}
+
+.animate-ear-wiggle {
+  animation: ear-wiggle 1.2s ease-in-out infinite;
+}
+
+.animate-tail-wag {
+  animation: tail-wag 1s ease-in-out infinite;
+}
+
+.animate-sparkle {
+  animation: sparkle 2s ease-in-out infinite;
+}

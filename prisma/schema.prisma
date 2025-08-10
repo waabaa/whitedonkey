@@ -1,0 +1,144 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  role      AdminRole @default(MODERATOR)
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  sessions  Session[]
+  
+  @@map("admins")
+}
+
+model Application {
+  id              String            @id @default(cuid())
+  applicationId   String            @unique // 공개 조회용 ID
+  
+  // 신청자 정보
+  companyName     String
+  contactName     String
+  contactEmail    String
+  contactPhone    String
+  
+  // 프로젝트 정보
+  projectTitle    String
+  projectType     ProjectType
+  description     String            @db.Text
+  budgetRange     BudgetRange
+  timeline        String
+  
+  // 마케팅 요구사항
+  aiRequirements  String            @db.Text // 현재 마케팅 현황
+  blockchainNeeds String            @db.Text // 해결하고 싶은 마케팅 과제
+  
+  // 첨부파일
+  attachments     Attachment[]
+  
+  // 상태 관리
+  status          ApplicationStatus @default(PENDING)
+  priority        Priority         @default(MEDIUM)
+  adminNotes      String?          @db.Text
+  
+  // 추적 정보
+  ipAddress       String?
+  userAgent       String?
+  
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  
+  @@map("applications")
+}
+
+model Attachment {
+  id            String      @id @default(cuid())
+  filename      String
+  originalName  String
+  mimeType      String
+  size          Int
+  url           String
+  
+  applicationId String?
+  application   Application? @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  
+  createdAt     DateTime    @default(now())
+  
+  @@map("attachments")
+}
+
+model Notice {
+  id        String      @id @default(cuid())
+  title     String
+  content   String      @db.Text
+  published Boolean     @default(false)
+  priority  Boolean     @default(false) // 중요 공지사항
+  
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  
+  @@map("notices")
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  sessionToken String @unique
+  adminId   String
+  expires   DateTime
+  
+  admin     Admin    @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  
+  createdAt DateTime @default(now())
+  
+  @@map("sessions")
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  ADMIN
+  MODERATOR
+}
+
+enum ApplicationStatus {
+  PENDING      // 검토 대기
+  REVIEWING    // 검토 중
+  APPROVED     // 승인
+  REJECTED     // 거절
+  ON_HOLD      // 보류
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum ProjectType {
+  youtube     // YouTube 영상 마케팅 자동화
+  seo         // SEO/AEO 최적화
+  sns         // SNS 마케팅 관리
+  local       // 로컬 비즈니스 마케팅
+  payment     // 스테이블코인 결제 시스템
+  consulting  // AI 마케팅 컨설팅
+}
+
+enum BudgetRange {
+  under_10m    // 월 50만원 미만
+  10m_50m      // 월 50만원 ~ 100만원
+  50m_100m     // 월 100만원 ~ 200만원
+  100m_500m    // 월 200만원 ~ 500만원
+  over_500m    // 월 500만원 이상
+}
