@@ -45,7 +45,10 @@ cd "$SERVER_PATH"
 # 1. 환경변수 로드
 log "1. 환경변수 로드..."
 if [ -f ".env" ]; then
-    export $(grep -v '^#' .env | xargs)
+    # 안전한 환경변수 로드
+    set -a
+    source .env
+    set +a
     success "환경변수 로드 완료"
 else
     error ".env 파일을 찾을 수 없습니다"

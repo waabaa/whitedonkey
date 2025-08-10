@@ -124,7 +124,7 @@ NEXTAUTH_SECRET="whitedonkey-secret-$(openssl rand -base64 32 | tr -d '=+/')"
 NEXTAUTH_URL="https://whitedonkey.ktenterprise.net"
 
 # Application Settings
-APP_NAME="흰당나귀 (White Donkey)"
+APP_NAME="White Donkey AI Marketing Platform"
 ADMIN_EMAIL="support@whitedonkey.co.kr"
 
 # Rate Limiting
@@ -144,7 +144,11 @@ success ".env 파일 생성 완료"
 
 # 5. 환경변수 로드 테스트
 log "5. 환경변수 로드 테스트..."
-export $(grep -v '^#' .env | xargs)
+
+# 안전한 환경변수 로드 (따옴표 문제 해결)
+set -a
+source .env
+set +a
 
 if [ -n "$DATABASE_URL" ]; then
     success "DATABASE_URL 설정 확인됨"
