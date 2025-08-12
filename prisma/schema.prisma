@@ -79,6 +79,21 @@ model Attachment {
   @@map("attachments")
 }
 
+model ContactInquiry {
+  id        Int         @id @default(autoincrement())
+  name      String
+  email     String
+  company   String?
+  subject   String
+  message   String      @db.Text
+  status    InquiryStatus @default(PENDING)
+  
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  
+  @@map("contact_inquiries")
+}
+
 model Notice {
   id        String      @id @default(cuid())
   title     String
@@ -141,4 +156,11 @@ enum BudgetRange {
   range_50m_100m     // 월 100만원 ~ 200만원
   range_100m_500m    // 월 200만원 ~ 500만원
   over_500m    // 월 500만원 이상
+}
+
+enum InquiryStatus {
+  PENDING    // 접수 대기
+  RECEIVED   // 접수 완료
+  REPLIED    // 답변 완료
+  CLOSED     // 종료
 }
