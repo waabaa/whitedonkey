@@ -14,22 +14,61 @@ export async function POST(request: NextRequest) {
   try {
     const body: ContactFormData = await request.json();
     
-    // Basic validation
-    if (!body.name || !body.email || !body.subject || !body.message) {
-      return NextResponse.json(
-        { 
-          error: "필수 항목을 모두 입력해주세요.",
-          details: "이름, 이메일, 제목, 메시지는 필수입니다." 
-        },
-        { status: 400 }
-      );
+    // Detailed field validation
+    const errors: { [key: string]: string } = {};
+    
+    // Name validation
+    if (!body.name || body.name.trim().length === 0) {
+      errors.name = "이름을 입력해주세요.";
+    } else if (body.name.trim().length < 2) {
+      errors.name = "이름은 2글자 이상 입력해주세요.";
+    } else if (body.name.trim().length > 50) {
+      errors.name = "이름은 50글자 이하로 입력해주세요.";
     }
 
-    // Email format validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(body.email)) {
+    // Email validation
+    if (!body.email || body.email.trim().length === 0) {
+      errors.email = "이메일 주소를 입력해주세요.";
+    } else {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(body.email.trim())) {
+        errors.email = "올바른 이메일 주소 형식으로 입력해주세요.";
+      } else if (body.email.trim().length > 100) {
+        errors.email = "이메일 주소는 100글자 이하로 입력해주세요.";
+      }
+    }
+
+    // Company validation (optional but with length limit)
+    if (body.company && body.company.trim().length > 100) {
+      errors.company = "회사명은 100글자 이하로 입력해주세요.";
+    }
+
+    // Subject validation
+    if (!body.subject || body.subject.trim().length === 0) {
+      errors.subject = "문의 제목을 입력해주세요.";
+    } else if (body.subject.trim().length < 5) {
+      errors.subject = "문의 제목은 5글자 이상 입력해주세요.";
+    } else if (body.subject.trim().length > 200) {
+      errors.subject = "문의 제목은 200글자 이하로 입력해주세요.";
+    }
+
+    // Message validation
+    if (!body.message || body.message.trim().length === 0) {
+      errors.message = "문의 내용을 입력해주세요.";
+    } else if (body.message.trim().length < 10) {
+      errors.message = "문의 내용은 10글자 이상 입력해주세요.";
+    } else if (body.message.trim().length > 2000) {
+      errors.message = "문의 내용은 2000글자 이하로 입력해주세요.";
+    }
+
+    // Return validation errors if any
+    if (Object.keys(errors).length > 0) {
       return NextResponse.json(
-        { error: "올바른 이메일 주소를 입력해주세요." },
+        { 
+          error: "입력 정보를 확인해주세요.",
+          fieldErrors: errors,
+          details: `${Object.keys(errors).length}개 필드에 오류가 있습니다.`
+        },
         { status: 400 }
       );
     }

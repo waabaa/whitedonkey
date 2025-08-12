@@ -17,10 +17,12 @@ export default function ContactPage() {
     message: ""
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState<{ [key: string]: string }>({});
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setFieldErrors({}); // Clear previous errors
 
     try {
       const response = await fetch('/api/contact', {
@@ -36,7 +38,7 @@ export default function ContactPage() {
       if (response.ok) {
         toast.success(data.message || '문의가 성공적으로 접수되었습니다!');
         
-        // Reset form
+        // Reset form and errors
         setFormData({
           name: "",
           email: "",
@@ -44,8 +46,15 @@ export default function ContactPage() {
           subject: "",
           message: ""
         });
+        setFieldErrors({});
       } else {
-        toast.error(data.error || '문의 접수 중 오류가 발생했습니다.');
+        // Handle field-specific errors
+        if (data.fieldErrors) {
+          setFieldErrors(data.fieldErrors);
+          toast.error(data.details || '입력 정보를 확인해주세요.');
+        } else {
+          toast.error(data.error || '문의 접수 중 오류가 발생했습니다.');
+        }
       }
     } catch (error) {
       console.error('Contact form error:', error);
@@ -56,10 +65,19 @@ export default function ContactPage() {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [name]: value
     });
+
+    // Clear field error when user starts typing
+    if (fieldErrors[name]) {
+      setFieldErrors({
+        ...fieldErrors,
+        [name]: ""
+      });
+    }
   };
 
   return (
@@ -125,8 +143,15 @@ export default function ContactPage() {
                       onChange={handleChange}
                       placeholder="홍길동"
                       required
-                      className="bg-card border-border focus:border-primary"
+                      className={`bg-card border-border focus:border-primary ${
+                        fieldErrors.name 
+                          ? 'border-red-500 focus:border-red-500 bg-red-50/5' 
+                          : ''
+                      }`}
                     />
+                    {fieldErrors.name && (
+                      <p className="text-red-500 text-sm mt-1">{fieldErrors.name}</p>
+                    )}
                   </div>
                   
                   <div className="space-y-2">
@@ -141,8 +166,15 @@ export default function ContactPage() {
                       onChange={handleChange}
                       placeholder="example@company.co.kr"
                       required
-                      className="bg-card border-border focus:border-primary"
+                      className={`bg-card border-border focus:border-primary ${
+                        fieldErrors.email 
+                          ? 'border-red-500 focus:border-red-500 bg-red-50/5' 
+                          : ''
+                      }`}
                     />
+                    {fieldErrors.email && (
+                      <p className="text-red-500 text-sm mt-1">{fieldErrors.email}</p>
+                    )}
                   </div>
                 </div>
 
@@ -156,8 +188,15 @@ export default function ContactPage() {
                     value={formData.company}
                     onChange={handleChange}
                     placeholder="(주)홍길동컴퍼니"
-                    className="bg-card border-border focus:border-primary"
+                    className={`bg-card border-border focus:border-primary ${
+                      fieldErrors.company 
+                        ? 'border-red-500 focus:border-red-500 bg-red-50/5' 
+                        : ''
+                    }`}
                   />
+                  {fieldErrors.company && (
+                    <p className="text-red-500 text-sm mt-1">{fieldErrors.company}</p>
+                  )}
                 </div>
 
                 <div className="space-y-2">
@@ -171,8 +210,15 @@ export default function ContactPage() {
                     onChange={handleChange}
                     placeholder="AI 마케팅 자동화 협력 문의"
                     required
-                    className="bg-card border-border focus:border-primary"
+                    className={`bg-card border-border focus:border-primary ${
+                      fieldErrors.subject 
+                        ? 'border-red-500 focus:border-red-500 bg-red-50/5' 
+                        : ''
+                    }`}
                   />
+                  {fieldErrors.subject && (
+                    <p className="text-red-500 text-sm mt-1">{fieldErrors.subject}</p>
+                  )}
                 </div>
 
                 <div className="space-y-2">
@@ -187,8 +233,15 @@ export default function ContactPage() {
                     placeholder="현재 비즈니스 상황과 AI 마케팅 자동화를 통해 해결하고 싶은 과제를 구체적으로 적어주세요. 예: 온라인 매출 증대, 고객 획득 비용 절감, SNS 마케팅 자동화 등"
                     rows={6}
                     required
-                    className="bg-card border-border focus:border-primary resize-none"
+                    className={`bg-card border-border focus:border-primary resize-none ${
+                      fieldErrors.message 
+                        ? 'border-red-500 focus:border-red-500 bg-red-50/5' 
+                        : ''
+                    }`}
                   />
+                  {fieldErrors.message && (
+                    <p className="text-red-500 text-sm mt-1">{fieldErrors.message}</p>
+                  )}
                 </div>
 
                 <Button 
